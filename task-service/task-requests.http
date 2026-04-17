@@ -1,0 +1,42 @@
+### Create project
+POST http://localhost:8082/projects
+Content-Type: application/json
+
+{
+  "name": "First Project",
+  "description": "My first project in task-service",
+  "ownerId": 1
+}
+
+### Get all projects
+GET http://localhost:8082/projects
+
+### Create task
+POST http://localhost:8082/tasks
+Content-Type: application/json
+
+{
+  "title": "First Task",
+  "description": "My first task",
+  "status": "TODO",
+  "priority": "HIGH",
+  "assigneeId": 1,
+  "createdBy": 1,
+  "projectId": 1
+}
+
+### Get all tasks
+GET http://localhost:8082/tasks
+
+### Create comment
+POST http://localhost:8082/comments
+Content-Type: application/json
+
+{
+  "content": "This is my first comment",
+  "authorId": 1,
+  "taskId": 1
+}
+
+### Get comments by task
+GET http://localhost:8082/comments/by-task/1
