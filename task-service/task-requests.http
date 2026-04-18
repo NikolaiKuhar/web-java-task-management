@@ -40,3 +40,17 @@ Content-Type: application/json
 
 ### Get comments by task
 GET http://localhost:8082/comments/by-task/1
+
+### Secure test without token
+GET http://localhost:8082/secure/me
+
+### Secure test with token
+GET http://localhost:8082/secure/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUwNDk4MSwiZXhwIjoxNzc2NTkxMzgxfQ.2E922Bdt_wixeyJPDW3IoT7U638tQaKchbKAQod3Dgs
+
+### Get projects without token
+GET http://localhost:8082/projects
+
+### Get projects with token
+GET http://localhost:8082/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUwNDk4MSwiZXhwIjoxNzc2NTkxMzgxfQ.2E922Bdt_wixeyJPDW3IoT7U638tQaKchbKAQod3Dgs

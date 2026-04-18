@@ -21,3 +21,6 @@ spring:
   sql:
     init:
       mode: never
+
+jwt:
+  secret: mySuperSecretKeyForJwtTokenGeneration1234567890
