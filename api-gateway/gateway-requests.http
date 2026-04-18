@@ -10,16 +10,48 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### 3. Secure test through gateway without token
-GET http://localhost:8080/secure/me
+### 3. Create project with token
+POST http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNjE0MywiZXhwIjoxNzc2NjEyNTQzfQ.fedKEl4Sr6c5KUMgNxxKCcvy48HkU6dewHaXzpBAFA0
+Content-Type: application/json
 
-### 4. Secure test through gateway with token
-GET http://localhost:8080/secure/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNTE3NywiZXhwIjoxNzc2NjExNTc3fQ.Dhr_Ej2hnvhvdEXTB5LSlX-WKBnEBbB4vVShW8BlHgA
+{
+  "name": "JWT Project",
+  "description": "Created from token user"
+}
 
-### 5. Get projects through gateway without token
+### 4. Get projects with token
 GET http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNjE0MywiZXhwIjoxNzc2NjEyNTQzfQ.fedKEl4Sr6c5KUMgNxxKCcvy48HkU6dewHaXzpBAFA0
 
-### 6. Get projects through gateway with token
-GET http://localhost:8080/projects
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNTE3NywiZXhwIjoxNzc2NjExNTc3fQ.Dhr_Ej2hnvhvdEXTB5LSlX-WKBnEBbB4vVShW8BlHgA
+### 5. Create task with token
+POST http://localhost:8080/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNjE0MywiZXhwIjoxNzc2NjEyNTQzfQ.fedKEl4Sr6c5KUMgNxxKCcvy48HkU6dewHaXzpBAFA0
+Content-Type: application/json
+
+{
+  "title": "JWT Task",
+  "description": "Task from token user",
+  "status": "TODO",
+  "priority": "HIGH",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 6. Get tasks with token
+GET http://localhost:8080/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNjE0MywiZXhwIjoxNzc2NjEyNTQzfQ.fedKEl4Sr6c5KUMgNxxKCcvy48HkU6dewHaXzpBAFA0
+
+### 7. Create comment with token
+POST http://localhost:8080/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNjE0MywiZXhwIjoxNzc2NjEyNTQzfQ.fedKEl4Sr6c5KUMgNxxKCcvy48HkU6dewHaXzpBAFA0
+Content-Type: application/json
+
+{
+  "content": "Comment from token user",
+  "taskId": 1
+}
+
+### 8. Get comments by task with token
+GET http://localhost:8080/comments/by-task/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNjE0MywiZXhwIjoxNzc2NjEyNTQzfQ.fedKEl4Sr6c5KUMgNxxKCcvy48HkU6dewHaXzpBAFA0

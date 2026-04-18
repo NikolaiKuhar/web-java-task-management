@@ -16,11 +16,13 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    public ProjectResponseDto createProject(CreateProjectRequestDto request) {
+    public ProjectResponseDto createProject(CreateProjectRequestDto request, String username) {
+        Long ownerId = resolveUserId(username);
+
         Project project = Project.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .ownerId(request.getOwnerId() != null ? request.getOwnerId() : 1L)
+                .ownerId(ownerId)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -46,5 +48,12 @@ public class ProjectService {
                 .createdAt(project.getCreatedAt())
                 .updatedAt(project.getUpdatedAt())
                 .build();
+    }
+
+    private Long resolveUserId(String username) {
+        if ("testuser".equals(username)) {
+            return 1L;
+        }
+        return 999L;
     }
 }

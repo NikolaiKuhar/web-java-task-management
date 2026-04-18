@@ -5,6 +5,7 @@ import com.taskmanagement.task.dto.ProjectResponseDto;
 import com.taskmanagement.task.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +18,9 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
-    public ProjectResponseDto createProject(@Valid @RequestBody CreateProjectRequestDto request) {
-        return projectService.createProject(request);
+    public ProjectResponseDto createProject(@Valid @RequestBody CreateProjectRequestDto request,
+                                            Authentication authentication) {
+        return projectService.createProject(request, authentication.getName());
     }
 
     @GetMapping

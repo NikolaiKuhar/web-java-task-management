@@ -19,13 +19,15 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
 
-    public CommentResponseDto createComment(CreateCommentRequestDto request) {
+    public CommentResponseDto createComment(CreateCommentRequestDto request, String username) {
         Task task = taskRepository.findById(request.getTaskId())
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
+        Long authorId = resolveUserId(username);
+
         Comment comment = Comment.builder()
                 .content(request.getContent())
-                .authorId(request.getAuthorId())
+                .authorId(authorId)
                 .task(task)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -50,5 +52,12 @@ public class CommentService {
                 .taskId(comment.getTask().getId())
                 .createdAt(comment.getCreatedAt())
                 .build();
+    }
+
+    private Long resolveUserId(String username) {
+        if ("testuser".equals(username)) {
+            return 1L;
+        }
+        return 999L;
     }
 }

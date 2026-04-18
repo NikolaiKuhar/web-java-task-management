@@ -25,9 +25,6 @@ public class CreateTaskRequestDto {
     @NotNull(message = "Assignee id is required")
     private Long assigneeId;
 
-    @NotNull(message = "Created by is required")
-    private Long createdBy;
-
     @NotNull(message = "Project id is required")
     private Long projectId;
 }

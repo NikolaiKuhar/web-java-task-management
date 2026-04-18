@@ -19,9 +19,11 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
 
-    public TaskResponseDto createTask(CreateTaskRequestDto request) {
+    public TaskResponseDto createTask(CreateTaskRequestDto request, String username) {
         Project project = projectRepository.findById(request.getProjectId())
                 .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        Long createdBy = resolveUserId(username);
 
         Task task = Task.builder()
                 .title(request.getTitle())
@@ -29,7 +31,7 @@ public class TaskService {
                 .status(request.getStatus())
                 .priority(request.getPriority())
                 .assigneeId(request.getAssigneeId())
-                .createdBy(request.getCreatedBy())
+                .createdBy(createdBy)
                 .project(project)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -60,5 +62,12 @@ public class TaskService {
                 .createdAt(task.getCreatedAt())
                 .updatedAt(task.getUpdatedAt())
                 .build();
+    }
+
+    private Long resolveUserId(String username) {
+        if ("testuser".equals(username)) {
+            return 1L;
+        }
+        return 999L;
     }
 }
