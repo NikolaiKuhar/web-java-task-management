@@ -1,0 +1,25 @@
+### 1. Auth hello through gateway
+GET http://localhost:8080/auth/hello
+
+### 2. Login through gateway
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "123456"
+}
+
+### 3. Secure test through gateway without token
+GET http://localhost:8080/secure/me
+
+### 4. Secure test through gateway with token
+GET http://localhost:8080/secure/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNTE3NywiZXhwIjoxNzc2NjExNTc3fQ.Dhr_Ej2hnvhvdEXTB5LSlX-WKBnEBbB4vVShW8BlHgA
+
+### 5. Get projects through gateway without token
+GET http://localhost:8080/projects
+
+### 6. Get projects through gateway with token
+GET http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNTE3NywiZXhwIjoxNzc2NjExNTc3fQ.Dhr_Ej2hnvhvdEXTB5LSlX-WKBnEBbB4vVShW8BlHgA

@@ -4,12 +4,16 @@ server:
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
       routes:
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**
+
         - id: task-service
           uri: http://localhost:8082
           predicates:
-            - Path=/api/tasks/**
-          filters:
-            - RewritePath=/api/tasks/(?<segment>.*), /tasks/${segment}
+            - Path=/projects/**,/tasks/**,/comments/**,/secure/**
