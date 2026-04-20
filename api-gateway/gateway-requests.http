@@ -55,3 +55,24 @@ Content-Type: application/json
 ### 8. Get comments by task with token
 GET http://localhost:8080/comments/by-task/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjUyNjE0MywiZXhwIjoxNzc2NjEyNTQzfQ.fedKEl4Sr6c5KUMgNxxKCcvy48HkU6dewHaXzpBAFA0
+
+### 9. Get project by id with token
+GET http://localhost:8080/projects/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjcwOTQxOSwiZXhwIjoxNzc2Nzk1ODE5fQ.dxfk_jgk8KvRr4y3BQKS315GohOjax2qtYb5BSrTY1Q
+
+### 10. Get task by id with token
+GET http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjcwOTQxOSwiZXhwIjoxNzc2Nzk1ODE5fQ.dxfk_jgk8KvRr4y3BQKS315GohOjax2qtYb5BSrTY1Q
+
+### 11. Update task status with token
+PATCH http://localhost:8080/tasks/1/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjcwOTQxOSwiZXhwIjoxNzc2Nzk1ODE5fQ.dxfk_jgk8KvRr4y3BQKS315GohOjax2qtYb5BSrTY1Q
+Content-Type: application/json
+
+{
+  "status": "DONE"
+}
+
+### 12. Delete task with token
+DELETE http://localhost:8080/tasks/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjcwOTQxOSwiZXhwIjoxNzc2Nzk1ODE5fQ.dxfk_jgk8KvRr4y3BQKS315GohOjax2qtYb5BSrTY1Q

@@ -2,6 +2,7 @@ package com.taskmanagement.task.service;
 
 import com.taskmanagement.task.dto.CreateProjectRequestDto;
 import com.taskmanagement.task.dto.ProjectResponseDto;
+import com.taskmanagement.task.dto.UpdateProjectRequestDto;
 import com.taskmanagement.task.entity.Project;
 import com.taskmanagement.task.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,13 @@ public class ProjectService {
                 .toList();
     }
 
+    public ProjectResponseDto getProjectById(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        return mapToResponse(project);
+    }
+
     private ProjectResponseDto mapToResponse(Project project) {
         return ProjectResponseDto.builder()
                 .id(project.getId())
@@ -55,5 +63,25 @@ public class ProjectService {
             return 1L;
         }
         return 999L;
+    }
+
+    public ProjectResponseDto updateProject(Long id, UpdateProjectRequestDto request) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        project.setName(request.getName());
+        project.setDescription(request.getDescription());
+        project.setUpdatedAt(LocalDateTime.now());
+
+        Project updatedProject = projectRepository.save(project);
+
+        return mapToResponse(updatedProject);
+    }
+
+    public void deleteProject(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        projectRepository.delete(project);
     }
 }

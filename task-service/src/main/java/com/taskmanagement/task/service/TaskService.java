@@ -2,6 +2,8 @@ package com.taskmanagement.task.service;
 
 import com.taskmanagement.task.dto.CreateTaskRequestDto;
 import com.taskmanagement.task.dto.TaskResponseDto;
+import com.taskmanagement.task.dto.UpdateTaskRequestDto;
+import com.taskmanagement.task.dto.UpdateTaskStatusRequestDto;
 import com.taskmanagement.task.entity.Project;
 import com.taskmanagement.task.entity.Task;
 import com.taskmanagement.task.repository.ProjectRepository;
@@ -49,6 +51,32 @@ public class TaskService {
                 .toList();
     }
 
+    public TaskResponseDto getTaskById(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        return mapToResponse(task);
+    }
+
+    public TaskResponseDto updateTaskStatus(Long id, UpdateTaskStatusRequestDto request) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        task.setStatus(request.getStatus());
+        task.setUpdatedAt(LocalDateTime.now());
+
+        Task updatedTask = taskRepository.save(task);
+
+        return mapToResponse(updatedTask);
+    }
+
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        taskRepository.delete(task);
+    }
+
     private TaskResponseDto mapToResponse(Task task) {
         return TaskResponseDto.builder()
                 .id(task.getId())
@@ -62,6 +90,26 @@ public class TaskService {
                 .createdAt(task.getCreatedAt())
                 .updatedAt(task.getUpdatedAt())
                 .build();
+    }
+
+    public TaskResponseDto updateTask(Long id, UpdateTaskRequestDto request) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+        task.setStatus(request.getStatus());
+        task.setPriority(request.getPriority());
+        task.setAssigneeId(request.getAssigneeId());
+        task.setProject(project);
+        task.setUpdatedAt(LocalDateTime.now());
+
+        Task updatedTask = taskRepository.save(task);
+
+        return mapToResponse(updatedTask);
     }
 
     private Long resolveUserId(String username) {

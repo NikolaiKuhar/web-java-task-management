@@ -2,6 +2,7 @@ package com.taskmanagement.task.controller;
 
 import com.taskmanagement.task.dto.CreateProjectRequestDto;
 import com.taskmanagement.task.dto.ProjectResponseDto;
+import com.taskmanagement.task.dto.UpdateProjectRequestDto;
 import com.taskmanagement.task.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,22 @@ public class ProjectController {
     @GetMapping
     public List<ProjectResponseDto> getAllProjects() {
         return projectService.getAllProjects();
+    }
+
+    @GetMapping("/{id}")
+    public ProjectResponseDto getProjectById(@PathVariable Long id) {
+        return projectService.getProjectById(id);
+    }
+
+    @PutMapping("/{id}")
+    public ProjectResponseDto updateProject(@PathVariable Long id,
+                                            @Valid @RequestBody UpdateProjectRequestDto request) {
+        return projectService.updateProject(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteProject(@PathVariable Long id) {
+        projectService.deleteProject(id);
+        return "Project deleted successfully";
     }
 }
