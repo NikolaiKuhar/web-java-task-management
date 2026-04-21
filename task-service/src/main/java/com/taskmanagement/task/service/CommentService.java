@@ -18,12 +18,13 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
+    private final AuthUserClient authUserClient;
 
     public CommentResponseDto createComment(CreateCommentRequestDto request, String username) {
         Task task = taskRepository.findById(request.getTaskId())
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        Long authorId = resolveUserId(username);
+        Long authorId = authUserClient.getUserByUsername(username).getId();
 
         Comment comment = Comment.builder()
                 .content(request.getContent())
@@ -54,10 +55,4 @@ public class CommentService {
                 .build();
     }
 
-    private Long resolveUserId(String username) {
-        if ("testuser".equals(username)) {
-            return 1L;
-        }
-        return 999L;
-    }
 }

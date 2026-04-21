@@ -1,9 +1,6 @@
 package com.taskmanagement.auth.controller;
 
-import com.taskmanagement.auth.dto.AuthResponseDto;
-import com.taskmanagement.auth.dto.LoginRequestDto;
-import com.taskmanagement.auth.dto.LoginResponseDto;
-import com.taskmanagement.auth.dto.RegisterRequestDto;
+import com.taskmanagement.auth.dto.*;
 import com.taskmanagement.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +21,10 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponseDto login(@Valid @RequestBody LoginRequestDto request) {
         return authService.login(request);
+    }
+
+    @GetMapping("/users/by-username/{username}")
+    public UserResponseDto getUserByUsername(@PathVariable String username) {
+        return authService.getUserByUsername(username);
     }
 }

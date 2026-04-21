@@ -76,3 +76,50 @@ Content-Type: application/json
 ### 12. Delete task with token
 DELETE http://localhost:8080/tasks/3
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3NjcwOTQxOSwiZXhwIjoxNzc2Nzk1ODE5fQ.dxfk_jgk8KvRr4y3BQKS315GohOjax2qtYb5BSrTY1Q
+
+
+### 13. Update project with token
+PUT http://localhost:8080/projects/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njc5NzAyNiwiZXhwIjoxNzc2ODgzNDI2fQ.Q9PkITdrqgRWt0I64pNedHq2MVp1k3vzO3YBXFSvFNQ
+Content-Type: application/json
+
+{
+  "name": "Updated Project",
+  "description": "Updated description"
+}
+
+### 14. Create temp project for delete
+POST http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njc5NzAyNiwiZXhwIjoxNzc2ODgzNDI2fQ.Q9PkITdrqgRWt0I64pNedHq2MVp1k3vzO3YBXFSvFNQ
+Content-Type: application/json
+
+{
+  "name": "Project to delete",
+  "description": "Temporary project"
+}
+
+### 15. Delete temp project
+DELETE http://localhost:8080/projects/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njc5NzAyNiwiZXhwIjoxNzc2ODgzNDI2fQ.Q9PkITdrqgRWt0I64pNedHq2MVp1k3vzO3YBXFSvFNQ
+
+### 16. Get deleted project
+GET http://localhost:8080/projects/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njc5NzAyNiwiZXhwIjoxNzc2ODgzNDI2fQ.Q9PkITdrqgRWt0I64pNedHq2MVp1k3vzO3YBXFSvFNQ
+
+### 17. Update task with token
+PUT http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njc5NzAyNiwiZXhwIjoxNzc2ODgzNDI2fQ.Q9PkITdrqgRWt0I64pNedHq2MVp1k3vzO3YBXFSvFNQ
+Content-Type: application/json
+
+{
+  "title": "Updated Task",
+  "description": "Updated task description",
+  "status": "IN_PROGRESS",
+  "priority": "MEDIUM",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 18. Get updated task
+GET http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njc5NzAyNiwiZXhwIjoxNzc2ODgzNDI2fQ.Q9PkITdrqgRWt0I64pNedHq2MVp1k3vzO3YBXFSvFNQ

@@ -1,9 +1,6 @@
 package com.taskmanagement.auth.service;
 
-import com.taskmanagement.auth.dto.AuthResponseDto;
-import com.taskmanagement.auth.dto.LoginRequestDto;
-import com.taskmanagement.auth.dto.LoginResponseDto;
-import com.taskmanagement.auth.dto.RegisterRequestDto;
+import com.taskmanagement.auth.dto.*;
 import com.taskmanagement.auth.entity.Role;
 import com.taskmanagement.auth.entity.User;
 import com.taskmanagement.auth.repository.RoleRepository;
@@ -49,6 +46,17 @@ public class AuthService {
         userRepository.save(user);
 
         return new AuthResponseDto("User registered successfully");
+    }
+
+    public UserResponseDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .build();
     }
 
     public LoginResponseDto login(LoginRequestDto request) {

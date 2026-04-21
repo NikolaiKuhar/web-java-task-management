@@ -20,12 +20,13 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
+    private final AuthUserClient authUserClient;
 
     public TaskResponseDto createTask(CreateTaskRequestDto request, String username) {
         Project project = projectRepository.findById(request.getProjectId())
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
-        Long createdBy = resolveUserId(username);
+        Long createdBy = authUserClient.getUserByUsername(username).getId();
 
         Task task = Task.builder()
                 .title(request.getTitle())
@@ -112,10 +113,4 @@ public class TaskService {
         return mapToResponse(updatedTask);
     }
 
-    private Long resolveUserId(String username) {
-        if ("testuser".equals(username)) {
-            return 1L;
-        }
-        return 999L;
-    }
 }

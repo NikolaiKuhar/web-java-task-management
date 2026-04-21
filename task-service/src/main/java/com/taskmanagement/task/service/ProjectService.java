@@ -16,9 +16,10 @@ import java.util.List;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final AuthUserClient authUserClient;
 
     public ProjectResponseDto createProject(CreateProjectRequestDto request, String username) {
-        Long ownerId = resolveUserId(username);
+        Long ownerId = authUserClient.getUserByUsername(username).getId();
 
         Project project = Project.builder()
                 .name(request.getName())
@@ -56,13 +57,6 @@ public class ProjectService {
                 .createdAt(project.getCreatedAt())
                 .updatedAt(project.getUpdatedAt())
                 .build();
-    }
-
-    private Long resolveUserId(String username) {
-        if ("testuser".equals(username)) {
-            return 1L;
-        }
-        return 999L;
     }
 
     public ProjectResponseDto updateProject(Long id, UpdateProjectRequestDto request) {
