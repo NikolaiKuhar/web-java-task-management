@@ -18,13 +18,13 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
-    private final AuthUserClient authUserClient;
+    private final CurrentUserResolver currentUserResolver;
 
     public CommentResponseDto createComment(CreateCommentRequestDto request, String username) {
         Task task = taskRepository.findById(request.getTaskId())
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        Long authorId = authUserClient.getUserByUsername(username).getId();
+        Long authorId = currentUserResolver.resolveUserId(username);
 
         Comment comment = Comment.builder()
                 .content(request.getContent())
@@ -45,6 +45,26 @@ public class CommentService {
                 .toList();
     }
 
+    public CommentResponseDto getCommentById(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        return mapToResponse(comment);
+    }
+
+    public void deleteComment(Long id, String username) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        Long currentUserId = currentUserResolver.resolveUserId(username);
+
+        if (!comment.getAuthorId().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to delete this comment");
+        }
+
+        commentRepository.delete(comment);
+    }
+
     private CommentResponseDto mapToResponse(Comment comment) {
         return CommentResponseDto.builder()
                 .id(comment.getId())
@@ -54,5 +74,4 @@ public class CommentService {
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
-
 }

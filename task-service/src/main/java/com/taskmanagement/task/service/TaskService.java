@@ -20,13 +20,13 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
-    private final AuthUserClient authUserClient;
+    private final CurrentUserResolver currentUserResolver;
 
     public TaskResponseDto createTask(CreateTaskRequestDto request, String username) {
         Project project = projectRepository.findById(request.getProjectId())
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
-        Long createdBy = authUserClient.getUserByUsername(username).getId();
+        Long createdBy = currentUserResolver.resolveUserId(username);
 
         Task task = Task.builder()
                 .title(request.getTitle())
@@ -59,9 +59,41 @@ public class TaskService {
         return mapToResponse(task);
     }
 
-    public TaskResponseDto updateTaskStatus(Long id, UpdateTaskStatusRequestDto request) {
+    public TaskResponseDto updateTask(Long id, UpdateTaskRequestDto request, String username) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        Long currentUserId = currentUserResolver.resolveUserId(username);
+
+        if (!task.getCreatedBy().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to update this task");
+        }
+
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+        task.setStatus(request.getStatus());
+        task.setPriority(request.getPriority());
+        task.setAssigneeId(request.getAssigneeId());
+        task.setProject(project);
+        task.setUpdatedAt(LocalDateTime.now());
+
+        Task updatedTask = taskRepository.save(task);
+
+        return mapToResponse(updatedTask);
+    }
+
+    public TaskResponseDto updateTaskStatus(Long id, UpdateTaskStatusRequestDto request, String username) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        Long currentUserId = currentUserResolver.resolveUserId(username);
+
+        if (!task.getCreatedBy().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to update task status");
+        }
 
         task.setStatus(request.getStatus());
         task.setUpdatedAt(LocalDateTime.now());
@@ -71,9 +103,15 @@ public class TaskService {
         return mapToResponse(updatedTask);
     }
 
-    public void deleteTask(Long id) {
+    public void deleteTask(Long id, String username) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        Long currentUserId = currentUserResolver.resolveUserId(username);
+
+        if (!task.getCreatedBy().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to delete this task");
+        }
 
         taskRepository.delete(task);
     }
@@ -92,25 +130,4 @@ public class TaskService {
                 .updatedAt(task.getUpdatedAt())
                 .build();
     }
-
-    public TaskResponseDto updateTask(Long id, UpdateTaskRequestDto request) {
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
-
-        Project project = projectRepository.findById(request.getProjectId())
-                .orElseThrow(() -> new RuntimeException("Project not found"));
-
-        task.setTitle(request.getTitle());
-        task.setDescription(request.getDescription());
-        task.setStatus(request.getStatus());
-        task.setPriority(request.getPriority());
-        task.setAssigneeId(request.getAssigneeId());
-        task.setProject(project);
-        task.setUpdatedAt(LocalDateTime.now());
-
-        Task updatedTask = taskRepository.save(task);
-
-        return mapToResponse(updatedTask);
-    }
-
 }

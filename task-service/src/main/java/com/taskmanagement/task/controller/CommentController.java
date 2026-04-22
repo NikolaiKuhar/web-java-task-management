@@ -27,4 +27,15 @@ public class CommentController {
     public List<CommentResponseDto> getByTask(@PathVariable Long taskId) {
         return commentService.getCommentsByTask(taskId);
     }
+
+    @GetMapping("/{id}")
+    public CommentResponseDto getCommentById(@PathVariable Long id) {
+        return commentService.getCommentById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteComment(@PathVariable Long id, Authentication authentication) {
+        commentService.deleteComment(id, authentication.getName());
+        return "Comment deleted successfully";
+    }
 }

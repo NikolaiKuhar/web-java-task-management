@@ -16,10 +16,10 @@ import java.util.List;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
-    private final AuthUserClient authUserClient;
+    private final CurrentUserResolver currentUserResolver;
 
     public ProjectResponseDto createProject(CreateProjectRequestDto request, String username) {
-        Long ownerId = authUserClient.getUserByUsername(username).getId();
+        Long ownerId = currentUserResolver.resolveUserId(username);
 
         Project project = Project.builder()
                 .name(request.getName())
@@ -48,20 +48,15 @@ public class ProjectService {
         return mapToResponse(project);
     }
 
-    private ProjectResponseDto mapToResponse(Project project) {
-        return ProjectResponseDto.builder()
-                .id(project.getId())
-                .name(project.getName())
-                .description(project.getDescription())
-                .ownerId(project.getOwnerId())
-                .createdAt(project.getCreatedAt())
-                .updatedAt(project.getUpdatedAt())
-                .build();
-    }
-
-    public ProjectResponseDto updateProject(Long id, UpdateProjectRequestDto request) {
+    public ProjectResponseDto updateProject(Long id, UpdateProjectRequestDto request, String username) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        Long currentUserId = currentUserResolver.resolveUserId(username);
+
+        if (!project.getOwnerId().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to update this project");
+        }
 
         project.setName(request.getName());
         project.setDescription(request.getDescription());
@@ -72,10 +67,27 @@ public class ProjectService {
         return mapToResponse(updatedProject);
     }
 
-    public void deleteProject(Long id) {
+    public void deleteProject(Long id, String username) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
+        Long currentUserId = currentUserResolver.resolveUserId(username);
+
+        if (!project.getOwnerId().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to delete this project");
+        }
+
         projectRepository.delete(project);
+    }
+
+    private ProjectResponseDto mapToResponse(Project project) {
+        return ProjectResponseDto.builder()
+                .id(project.getId())
+                .name(project.getName())
+                .description(project.getDescription())
+                .ownerId(project.getOwnerId())
+                .createdAt(project.getCreatedAt())
+                .updatedAt(project.getUpdatedAt())
+                .build();
     }
 }

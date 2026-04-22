@@ -123,3 +123,62 @@ Content-Type: application/json
 ### 18. Get updated task
 GET http://localhost:8080/tasks/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njc5NzAyNiwiZXhwIjoxNzc2ODgzNDI2fQ.Q9PkITdrqgRWt0I64pNedHq2MVp1k3vzO3YBXFSvFNQ
+
+### 19. Get user by username directly from auth-service
+GET http://localhost:8081/auth/users/by-username/testuser
+
+### 20. Create project with real user lookup
+POST http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njg4MzA2NiwiZXhwIjoxNzc2OTY5NDY2fQ.dMc_PwqyLtZfVwkTTZ-WNMysV-bNX8DIjd0FxBYlEXE
+Content-Type: application/json
+
+{
+  "name": "Real User Project",
+  "description": "Created using auth-service lookup"
+}
+
+### 21. Create task with real user lookup
+POST http://localhost:8080/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njg4MzA2NiwiZXhwIjoxNzc2OTY5NDY2fQ.dMc_PwqyLtZfVwkTTZ-WNMysV-bNX8DIjd0FxBYlEXE
+Content-Type: application/json
+
+{
+  "title": "Real User Task",
+  "description": "Task created using auth-service lookup",
+  "status": "TODO",
+  "priority": "HIGH",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 22. Create comment with real user lookup
+POST http://localhost:8080/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njg4MzA2NiwiZXhwIjoxNzc2OTY5NDY2fQ.dMc_PwqyLtZfVwkTTZ-WNMysV-bNX8DIjd0FxBYlEXE
+Content-Type: application/json
+
+{
+  "content": "Comment created using auth-service lookup",
+  "taskId": 1
+}
+
+### 23. Get comment by id
+GET http://localhost:8080/comments/1
+Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН
+
+### 24. Create temp comment for delete
+POST http://localhost:8080/comments
+Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН
+Content-Type: application/json
+
+{
+  "content": "Temp comment for delete",
+  "taskId": 1
+}
+
+### 25. Delete temp comment
+DELETE http://localhost:8080/comments/ID_ВРЕМЕННОГО_КОММЕНТАРИЯ
+Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН
+
+### 26. Get deleted comment
+GET http://localhost:8080/comments/ID_ВРЕМЕННОГО_КОММЕНТАРИЯ
+Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН

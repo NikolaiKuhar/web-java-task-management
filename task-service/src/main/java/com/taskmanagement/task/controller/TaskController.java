@@ -35,21 +35,23 @@ public class TaskController {
         return taskService.getTaskById(id);
     }
 
-    @PatchMapping("/{id}/status")
-    public TaskResponseDto updateTaskStatus(@PathVariable Long id,
-                                            @Valid @RequestBody UpdateTaskStatusRequestDto request) {
-        return taskService.updateTaskStatus(id, request);
-    }
-
     @PutMapping("/{id}")
     public TaskResponseDto updateTask(@PathVariable Long id,
-                                      @Valid @RequestBody UpdateTaskRequestDto request) {
-        return taskService.updateTask(id, request);
+                                      @Valid @RequestBody UpdateTaskRequestDto request,
+                                      Authentication authentication) {
+        return taskService.updateTask(id, request, authentication.getName());
+    }
+
+    @PatchMapping("/{id}/status")
+    public TaskResponseDto updateTaskStatus(@PathVariable Long id,
+                                            @Valid @RequestBody UpdateTaskStatusRequestDto request,
+                                            Authentication authentication) {
+        return taskService.updateTaskStatus(id, request, authentication.getName());
     }
 
     @DeleteMapping("/{id}")
-    public String deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
+    public String deleteTask(@PathVariable Long id, Authentication authentication) {
+        taskService.deleteTask(id, authentication.getName());
         return "Task deleted successfully";
     }
 }

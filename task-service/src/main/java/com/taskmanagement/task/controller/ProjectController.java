@@ -36,13 +36,14 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     public ProjectResponseDto updateProject(@PathVariable Long id,
-                                            @Valid @RequestBody UpdateProjectRequestDto request) {
-        return projectService.updateProject(id, request);
+                                            @Valid @RequestBody UpdateProjectRequestDto request,
+                                            Authentication authentication) {
+        return projectService.updateProject(id, request, authentication.getName());
     }
 
     @DeleteMapping("/{id}")
-    public String deleteProject(@PathVariable Long id) {
-        projectService.deleteProject(id);
+    public String deleteProject(@PathVariable Long id, Authentication authentication) {
+        projectService.deleteProject(id, authentication.getName());
         return "Project deleted successfully";
     }
 }
