@@ -273,11 +273,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIzIiwiaWF0IjoxN
 GET http://localhost:8080/auth/hello
 
 ### 2. Login through Docker gateway
-POST http://localhost:8080/auth/login
+POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-  "username": "dockertest",
+  "username": "composetest",
+  "email": "composetest@example.com",
   "password": "123456"
 }
 

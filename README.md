@@ -74,6 +74,173 @@ docker --version
 
 ---
 
+## How to run the project with Docker Compose
+
+The easiest way to run the whole project is to use Docker Compose.
+
+Docker Compose starts all required containers:
+
+- `postgres-auth`
+- `postgres-task`
+- `auth-service-container`
+- `task-service-container`
+- `api-gateway-container`
+
+### 1. Build the project
+
+Run this command from the root project folder:
+
+```bash
+mvn clean package -DskipTests
+```
+
+Expected result:
+
+```text
+BUILD SUCCESS
+```
+
+### 2. Start all services
+
+Run this command from the root project folder:
+
+```bash
+docker compose up -d --build
+```
+
+This command builds Docker images and starts all containers in the background.
+
+### 3. Check running containers
+
+```bash
+docker ps
+```
+
+Expected containers:
+
+```text
+postgres-auth
+postgres-task
+auth-service-container
+task-service-container
+api-gateway-container
+```
+
+### 4. Test API Gateway
+
+All requests should go through API Gateway on port `8080`.
+
+Check auth-service through gateway:
+
+```http
+GET http://localhost:8080/auth/hello
+```
+
+Expected result:
+
+```text
+Auth service is running
+```
+
+Register user:
+
+```http
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "username": "composetest",
+  "email": "composetest@example.com",
+  "password": "123456"
+}
+```
+
+Expected result:
+
+```json
+{
+  "message": "User registered successfully"
+}
+```
+
+Login user:
+
+```http
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "composetest",
+  "password": "123456"
+}
+```
+
+Expected result:
+
+```json
+{
+  "token": "JWT_TOKEN_HERE"
+}
+```
+
+Check secure endpoint:
+
+```http
+GET http://localhost:8080/secure/me
+Authorization: Bearer JWT_TOKEN_HERE
+```
+
+Expected result:
+
+```text
+Authenticated as: composetest
+```
+
+### 5. Stop all services
+
+```bash
+docker compose down
+```
+
+### 6. Start again without rebuild
+
+```bash
+docker compose up -d
+```
+
+### 7. View logs
+
+View logs for all services:
+
+```bash
+docker compose logs
+```
+
+View logs for one service:
+
+```bash
+docker compose logs auth-service
+docker compose logs task-service
+docker compose logs api-gateway
+```
+
+## Docker Compose notes
+
+The file `docker-compose.yml` is located in the root project folder.
+
+It starts:
+
+- two PostgreSQL databases
+- auth microservice
+- task microservice
+- API Gateway
+
+The services use Docker container names for internal communication:
+
+- `auth-service` connects to `postgres-auth`
+- `task-service` connects to `postgres-task`
+- `api-gateway` forwards requests to `auth-service-container` and `task-service-container`
+
 ## How to run the project with Docker
 
 ### 1. Clone the repository

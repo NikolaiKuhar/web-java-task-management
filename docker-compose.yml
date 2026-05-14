@@ -1,0 +1,74 @@
+services:
+  postgres-auth:
+    image: postgres:16
+    container_name: postgres-auth
+    environment:
+      POSTGRES_DB: task_management_auth
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_management_auth"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgres-task:
+    image: postgres:16
+    container_name: postgres-task
+    environment:
+      POSTGRES_DB: task_management_tasks
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_management_tasks"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  auth-service:
+    build:
+      context: ./auth-service
+    container_name: auth-service-container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-auth:5432/task_management_auth
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+    restart: unless-stopped
+
+  task-service:
+    build:
+      context: ./task-service
+    container_name: task-service-container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-task:5432/task_management_tasks
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      AUTH_SERVICE_URL: http://auth-service-container:8081
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres-task:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - task-service
+    restart: unless-stopped
