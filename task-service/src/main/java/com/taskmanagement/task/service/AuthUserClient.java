@@ -1,25 +1,20 @@
 package com.taskmanagement.task.service;
 
 import com.taskmanagement.task.dto.UserResponseDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-@Service
-@RequiredArgsConstructor
+@Component
 public class AuthUserClient {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    @Value("${auth.service.url}")
+    private String authServiceUrl;
 
     public UserResponseDto getUserByUsername(String username) {
-        String url = "http://localhost:8081/auth/users/by-username/" + username;
-
-        UserResponseDto user = restTemplate.getForObject(url, UserResponseDto.class);
-
-        if (user == null) {
-            throw new RuntimeException("User not found in auth-service");
-        }
-
-        return user;
+        String url = authServiceUrl + "/auth/users/by-username/" + username;
+        return restTemplate.getForObject(url, UserResponseDto.class);
     }
 }

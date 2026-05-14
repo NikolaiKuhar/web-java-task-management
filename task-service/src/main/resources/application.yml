@@ -6,7 +6,7 @@ spring:
     name: task-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/task_management_tasks
+    url: jdbc:postgresql://postgres-task:5432/task_management_tasks
     username: postgres
     password: 123456
 
@@ -24,3 +24,7 @@ spring:
 
 jwt:
   secret: mySuperSecretKeyForJwtTokenGeneration1234567890
+
+auth:
+  service:
+    url: http://auth-service-container:8081

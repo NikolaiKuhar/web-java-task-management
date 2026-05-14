@@ -161,24 +161,225 @@ Content-Type: application/json
   "taskId": 1
 }
 
-### 23. Get comment by id
-GET http://localhost:8080/comments/1
-Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН
-
-### 24. Create temp comment for delete
-POST http://localhost:8080/comments
-Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН
+### 23. Register second user
+POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-  "content": "Temp comment for delete",
+  "username": "testuser23",
+  "email": "testuser23@example.com",
+  "password": "123456"
+}
+
+### 24. Login as testuser
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "123456"
+}
+
+### 25. Login as testuser23
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser23",
+  "password": "123456"
+}
+
+### 26. Create project as testuser
+POST http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njk2NDUzNywiZXhwIjoxNzc3MDUwOTM3fQ.MlKEsmyIZtoKPTtZ573OPC1N2BpQpTNZGSWaT4tXn9E
+Content-Type: application/json
+
+{
+  "name": "Owned Project",
+  "description": "Project owned by testuser"
+}
+
+### 27. Create task as testuser
+POST http://localhost:8080/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njk2NDUzNywiZXhwIjoxNzc3MDUwOTM3fQ.MlKEsmyIZtoKPTtZ573OPC1N2BpQpTNZGSWaT4tXn9E
+Content-Type: application/json
+
+{
+  "title": "Owned Task",
+  "description": "Task owned by testuser",
+  "status": "TODO",
+  "priority": "HIGH",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 28. Create comment as testuser
+POST http://localhost:8080/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc3Njk2NDUzNywiZXhwIjoxNzc3MDUwOTM3fQ.MlKEsmyIZtoKPTtZ573OPC1N2BpQpTNZGSWaT4tXn9E
+Content-Type: application/json
+
+{
+  "content": "Owned comment by testuser",
   "taskId": 1
 }
 
-### 25. Delete temp comment
-DELETE http://localhost:8080/comments/ID_ВРЕМЕННОГО_КОММЕНТАРИЯ
-Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН
+### 29. Try update project as testuser2
+PUT http://localhost:8080/projects/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIzIiwiaWF0IjoxNzc2OTY0NjAyLCJleHAiOjE3NzcwNTEwMDJ9.fel-L5Bn_BQUhzHhZEIrkidkQ6__1ueM_fNr7SyeCRs
+Content-Type: application/json
 
-### 26. Get deleted comment
-GET http://localhost:8080/comments/ID_ВРЕМЕННОГО_КОММЕНТАРИЯ
-Authorization: Bearer ВСТАВЬ_СЮДА_ТОКЕН
+{
+  "name": "Hacked Project",
+  "description": "Should fail"
+}
+
+### 30. Try delete project as testuser2
+DELETE http://localhost:8080/projects/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIzIiwiaWF0IjoxNzc2OTY0NjAyLCJleHAiOjE3NzcwNTEwMDJ9.fel-L5Bn_BQUhzHhZEIrkidkQ6__1ueM_fNr7SyeCRs
+
+### 31. Try update task as testuser2
+PUT http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIzIiwiaWF0IjoxNzc2OTY0NjAyLCJleHAiOjE3NzcwNTEwMDJ9.fel-L5Bn_BQUhzHhZEIrkidkQ6__1ueM_fNr7SyeCRs
+Content-Type: application/json
+
+{
+  "title": "Hacked Task",
+  "description": "Should fail",
+  "status": "DONE",
+  "priority": "LOW",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 32. Try update task status as testuser2
+PATCH http://localhost:8080/tasks/1/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIzIiwiaWF0IjoxNzc2OTY0NjAyLCJleHAiOjE3NzcwNTEwMDJ9.fel-L5Bn_BQUhzHhZEIrkidkQ6__1ueM_fNr7SyeCRs
+Content-Type: application/json
+
+{
+  "status": "DONE"
+}
+
+### 33. Try delete task as testuser2
+DELETE http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIzIiwiaWF0IjoxNzc2OTY0NjAyLCJleHAiOjE3NzcwNTEwMDJ9.fel-L5Bn_BQUhzHhZEIrkidkQ6__1ueM_fNr7SyeCRs
+
+### 34. Try delete comment as testuser2
+DELETE http://localhost:8080/comments/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIzIiwiaWF0IjoxNzc2OTY0NjAyLCJleHAiOjE3NzcwNTEwMDJ9.fel-L5Bn_BQUhzHhZEIrkidkQ6__1ueM_fNr7SyeCRs
+
+
+### 1. Auth hello through Docker gateway
+GET http://localhost:8080/auth/hello
+
+### 2. Login through Docker gateway
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "dockertest",
+  "password": "123456"
+}
+
+### 3. Secure me through Docker gateway
+GET http://localhost:8080/secure/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+
+### 4. Get projects through Docker gateway
+GET http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+
+### 5. Create project through Docker gateway
+POST http://localhost:8080/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+Content-Type: application/json
+
+{
+  "name": "Docker Gateway Project",
+  "description": "Project created through api-gateway in Docker"
+}
+
+### 6. Create task through Docker gateway
+POST http://localhost:8080/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+Content-Type: application/json
+
+{
+  "title": "Docker Gateway Task",
+  "description": "Task created through api-gateway in Docker",
+  "status": "TODO",
+  "priority": "HIGH",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 7. Get tasks through Docker gateway
+GET http://localhost:8080/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+
+### 8. Create comment through Docker gateway
+POST http://localhost:8080/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+Content-Type: application/json
+
+{
+  "content": "Comment created through api-gateway in Docker",
+  "taskId": 1
+}
+
+### 9. Get comments by task through Docker gateway
+GET http://localhost:8080/comments/by-task/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+
+### 10. Update task through Docker gateway
+PUT http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+Content-Type: application/json
+
+{
+  "title": "Updated Docker Gateway Task",
+  "description": "Updated task through api-gateway in Docker",
+  "status": "IN_PROGRESS",
+  "priority": "MEDIUM",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 11. Get updated task through Docker gateway
+GET http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+
+### 12. Update task status through Docker gateway
+PATCH http://localhost:8080/tasks/1/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+Content-Type: application/json
+
+{
+  "status": "DONE"
+}
+
+### 13. Get task after status update through Docker gateway
+GET http://localhost:8080/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+
+### 14. Create temp task for delete through Docker gateway
+POST http://localhost:8080/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+Content-Type: application/json
+
+{
+  "title": "Temp Docker Task",
+  "description": "Temporary task for delete test",
+  "status": "TODO",
+  "priority": "LOW",
+  "assigneeId": 1,
+  "projectId": 1
+}
+
+### 15. Delete temp task through Docker gateway
+DELETE http://localhost:8080/tasks/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
+
+### 16. Get deleted task through Docker gateway
+GET http://localhost:8080/tasks/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkb2NrZXJ0ZXN0IiwiaWF0IjoxNzc4Nzg0NTM0LCJleHAiOjE3Nzg4NzA5MzR9.jePv24x-25DdNi63oDMPSx9w3ZHPUn8cf-ccYDH1yDU
